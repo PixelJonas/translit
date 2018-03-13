@@ -1,14 +1,26 @@
-import { Directive, ElementRef, Inject, Input, OnInit } from '@angular/core';
+import {
+  AfterViewInit,
+  ComponentFactoryResolver,
+  Directive,
+  ElementRef,
+  Inject,
+  Injector,
+  Input,
+} from '@angular/core';
 import { LIT_CONFIG, TranslitConfig } from "../model/translit.config";
 import { Observable } from "rxjs/Observable";
+import { HighlightDirectiveComponent } from "./highlight.directive";
 
 @Directive({
   selector: '[litTranslate]',
 })
-export class TranslitDirective implements OnInit {
+export class TranslitDirective implements AfterViewInit {
   private keys: string[];
 
-  constructor(private el: ElementRef, @Inject(LIT_CONFIG) private config: Observable<TranslitConfig>) {
+  constructor(@Inject(LIT_CONFIG) private config: Observable<TranslitConfig>,
+              private element: ElementRef,
+              private injector: Injector,
+              private factoryResolver: ComponentFactoryResolver) {
   }
 
   @Input()
@@ -17,13 +29,12 @@ export class TranslitDirective implements OnInit {
     console.log('keys: ', this.keys);
   }
 
-  ngOnInit() {
-    this.el.nativeElement.style.backgroundColor = 'blue';
-    this.config.subscribe((conf) => {
-      if (conf) {
-        //Object.keys(conf.translations).forEach((key) => console.log(key));
-      }
-    })
+  ngAfterViewInit() {
+    const factory = this.factoryResolver.resolveComponentFactory(HighlightDirectiveComponent);
+    const componentRef = factory.create(this.injector);
+    const view = componentRef.hostView;
+    const nodes: NodeList = this.element.nativeElement.childNodes;
+    console.log(this.element.nativeElement.childNodes);
   }
 
   convert(input: string | string[]): string[] {
