@@ -5,7 +5,7 @@ import {
   ElementRef,
   Inject,
   Input,
-  Renderer2, ViewChildren,
+  Renderer2,
   ViewContainerRef
 } from '@angular/core';
 import {LIT_CONFIG, TranslitConfig} from "../model/translit.config";
@@ -44,6 +44,10 @@ export class TranslitDirective implements AfterViewChecked {
     }
     for (let i = 0; i < nodes.length; ++i) {
       const sibling: any = nodes[i];
+      if (sibling.data && sibling.data['lit']) {
+        console.log("already lit");
+        continue;
+      }
       if (sibling.nodeType === 3) { // node type 3 is a text node
         this.processNode(sibling);
       }
@@ -57,12 +61,13 @@ export class TranslitDirective implements AfterViewChecked {
     const text = this.getContent(node).trim();
     if (text !== "") {
       const key = this.keys.find(value => text.indexOf(value) >= 0);
-      if (key)  {
+      if (key) {
         console.log("Found ", key);
         const litComponentFactory = this.resolver.resolveComponentFactory(TranslitComponent);
         const litComponentRef = this.viewContainerRef.createComponent(litComponentFactory);
 
         litComponentRef.instance.text = text;
+        litComponentRef.location.nativeElement.data = {lit: true};
 
         const parent = this.renderer.parentNode(node);
         const next = this.renderer.nextSibling(node);
