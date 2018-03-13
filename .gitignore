@@ -5,6 +5,7 @@
 /tmp
 /out-tsc
 /ngx-tabs-lib
+/translit
 
 # dependencies
 /node_modules
