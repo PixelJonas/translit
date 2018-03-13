@@ -1,21 +1,21 @@
-import { ModuleWithProviders, NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { TranslitDirective } from './translit/translit.directive';
-import { LIT_CONFIG, TranslitConfig } from "./model/translit.config";
-import { Observable } from "rxjs/Observable";
-import { HighlightDirectiveComponent } from "./translit/highlight.directive";
+import {ModuleWithProviders, NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {TranslitDirective} from './translit/translit.directive';
+import {LIT_CONFIG, TranslitConfig} from "./model/translit.config";
+import {Observable} from "rxjs/Observable";
+import {TranslitComponent} from "./translit/translit.component";
 
 @NgModule({
   imports: [CommonModule],
   declarations: [
     TranslitDirective,
-    HighlightDirectiveComponent,
+    TranslitComponent,
   ],
   exports: [
     TranslitDirective,
   ],
   entryComponents: [
-    HighlightDirectiveComponent,
+    TranslitComponent
   ],
 })
 export class TranslitModule {

@@ -1,3 +1,15 @@
-<h1 litTranslate="foo" >Hello Boi!</h1>
-<h1 [litTranslate]="arrayKeys" >Hello Gurl!</h1>
-<h1 [litTranslate]="['literally', 'lit']" >Hello Stupid!</h1>
+<div [litTranslate]="['text.to.replace.1', 'text.to.replace.2', 'text.to.replace.3']">
+  <!--text.to.replace.1-->
+  <div>
+    <div>
+    Leave this!
+    </div>
+  </div>
+  <div>
+    Leave this too!
+    <div>
+      <!--text.to.replace.2-->
+    </div>
+    <app-another-component></app-another-component>
+  </div>
+</div>
