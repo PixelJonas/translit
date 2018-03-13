@@ -1,0 +1,21 @@
+{
+  "$schema": "../../node_modules/ng-packagr/package.schema.json",
+  "name": "translit",
+  "version": "0.0.1",
+  "description": "",
+  "author": "Imba3r <https://github.com/imba3r>, PixelJonas <https://github.com/PixelJonas>",
+  "license": "LICENSE",
+  "repository": "https://github.com/PixelJonas/translit",
+  "keywords": ["angular", "translation", "i18n"],
+  "private": true,
+  "peerDependencies": {
+    "@angular/common": "^5.1.0",
+    "@angular/core": "^5.1.0"
+  },
+  "ngPackage": {
+    "lib": {
+      "entryFile": "public_api.ts"
+    },
+    "dest": "../../translit"
+  }
+}

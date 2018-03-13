@@ -1,0 +1,14 @@
+{
+  "version": 3,
+  "file": "translit.js",
+  "sources": [
+    "ng://translit/out/src/translit.module.ts",
+    "ng://translit/out/src/translit/translit.directive.ts"
+  ],
+  "sourcesContent": [
+    "import { NgModule } from '@angular/core';\r\nimport { CommonModule } from '@angular/common';\r\nimport { TranslitDirective } from \"./translit/translit.directive\";\r\n\r\n@NgModule({\r\n  imports: [CommonModule],\r\n  declarations: [TranslitDirective],\r\n  exports: [TranslitDirective]\r\n})\r\nexport class TranslitModule {}\r\n",
+    "import { Directive, ElementRef } from '@angular/core';\r\n\r\n@Directive({\r\n  selector: '[lit-translate]',\r\n})\r\nexport class TranslitDirective {\r\n  constructor(el: ElementRef) {\r\n    el.nativeElement.style.backgroundColor = 'yellow';\r\n  }\r\n}\r\n"
+  ],
+  "names": [],
+  "mappings": ";;;;;;;ACAA,AAKA,MAAA,iBAAA,CAAA;;;;IACE,WAAF,CAAc,EAAc,EAA5B;QACI,EAAE,CAAC,aAAa,CAAC,KAAK,CAAC,eAAe,GAAG,QAAQ,CAAC;KACnD;;;IANH,EAAA,IAAA,EAAC,SAAS,EAAV,IAAA,EAAA,CAAW;gBACT,QAAQ,EAAE,iBAAiB;aAC5B,EAAD,EAAA;;;;IAJA,EAAA,IAAA,EAAoB,UAAU,GAA9B;;;;;;;ADAA,AASA,MAAA,cAAA,CAAA;;;IALA,EAAA,IAAA,EAAC,QAAQ,EAAT,IAAA,EAAA,CAAU;gBACR,OAAO,EAAE,CAAC,YAAY,CAAC;gBACvB,YAAY,EAAE,CAAC,iBAAiB,CAAC;gBACjC,OAAO,EAAE,CAAC,iBAAiB,CAAC;aAC7B,EAAD,EAAA;;;;;;;;;;;;;;;;;;;;"
+}
