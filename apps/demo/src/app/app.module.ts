@@ -8,9 +8,10 @@ import { of } from 'rxjs/observable/of';
 @NgModule({
   imports: [
     BrowserModule,
-    TranslitModule.forRoot(of({'foo': 'bar', 'bar': 'foo'}))
+    TranslitModule.forRoot(of({'translations': {'foo': 'bar', 'bar': 'foo'}})),
   ],
   declarations: [AppComponent],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule {
+}
