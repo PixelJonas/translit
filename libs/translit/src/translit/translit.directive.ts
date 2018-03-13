@@ -8,25 +8,25 @@ import {
   Renderer2,
   ViewContainerRef
 } from '@angular/core';
-import {LIT_CONFIG, TranslitConfig} from "../model/translit.config";
-import {Observable} from "rxjs/Observable";
-import {TranslitComponent} from "./translit.component";
-import {isNullOrUndefined} from "util";
+import { LIT_CONFIG, TranslitConfig } from '../model/translit.config';
+import { Observable } from 'rxjs/Observable';
+import { TranslitComponent } from './translit.component';
+import { isNullOrUndefined } from 'util';
 
 @Directive({
-  selector: '[litTranslate]',
+  selector: '[litTranslate]'
 })
 export class TranslitDirective implements AfterViewChecked {
-
   private keys: string[];
   private managed: any[] = [];
 
-  constructor(@Inject(LIT_CONFIG) private config: Observable<TranslitConfig>,
-              private viewContainerRef: ViewContainerRef,
-              private resolver: ComponentFactoryResolver,
-              private elementRef: ElementRef,
-              private renderer: Renderer2) {
-  }
+  constructor(
+    @Inject(LIT_CONFIG) private config: Observable<TranslitConfig>,
+    private viewContainerRef: ViewContainerRef,
+    private resolver: ComponentFactoryResolver,
+    private elementRef: ElementRef,
+    private renderer: Renderer2
+  ) {}
 
   @Input()
   set litTranslate(value: string[] | string) {
@@ -40,18 +40,18 @@ export class TranslitDirective implements AfterViewChecked {
   processNodesOf(node: any): void {
     const nodes: NodeList = node.childNodes;
     if (!nodes || !nodes.length) {
-      return
+      return;
     }
     for (let i = 0; i < nodes.length; ++i) {
       const sibling: any = nodes[i];
       if (sibling.data && sibling.data['lit']) {
-        console.log("already lit");
+        console.log('already lit');
         continue;
       }
-      if (sibling.nodeType === 3) { // node type 3 is a text node
+      if (sibling.nodeType === 3) {
+        // node type 3 is a text node
         this.processNode(sibling);
-      }
-      else {
+      } else {
         this.processNodesOf(sibling);
       }
     }
@@ -59,15 +59,15 @@ export class TranslitDirective implements AfterViewChecked {
 
   processNode(node: any): void {
     const text = this.getContent(node).trim();
-    if (text !== "") {
+    if (text !== '') {
       const key = this.keys.find(value => text.indexOf(value) >= 0);
       if (key) {
-        console.log("Found ", key);
+        console.log('Found ', key);
         const litComponentFactory = this.resolver.resolveComponentFactory(TranslitComponent);
         const litComponentRef = this.viewContainerRef.createComponent(litComponentFactory);
 
         litComponentRef.instance.text = text;
-        litComponentRef.location.nativeElement.data = {lit: true};
+        litComponentRef.location.nativeElement.data = { lit: true };
 
         const parent = this.renderer.parentNode(node);
         const next = this.renderer.nextSibling(node);
@@ -94,5 +94,3 @@ export class TranslitDirective implements AfterViewChecked {
     return [];
   }
 }
-
-

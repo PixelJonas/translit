@@ -38,7 +38,7 @@
         "lib"
       ]
     },
-    "styleExt": "css",
+    "styleExt": "scss",
     "component": {}
   },
   "warnings": {
@@ -61,7 +61,8 @@
       "testTsconfig": "../../../tsconfig.spec.json",
       "prefix": "app",
       "styles": [
-        "styles.css"
+        "styles.scss",
+        "../../../node_modules/bootstrap/scss/bootstrap.scss"
       ],
       "scripts": [],
       "environmentSource": "environments/environment.ts",
@@ -86,7 +87,8 @@
       "testTsconfig": "../../../tsconfig.spec.json",
       "prefix": "app",
       "styles": [
-        "styles.css"
+        "styles.scss",
+        "../../../node_modules/bootstrap/scss/bootstrap.scss"
       ],
       "scripts": [],
       "environmentSource": "environments/environment.ts",
