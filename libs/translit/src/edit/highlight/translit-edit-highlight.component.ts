@@ -24,7 +24,7 @@ export class TranslitEditHighlightComponent implements AfterViewInit {
   translationKey: string;
 
   @Output()
-  submit = new EventEmitter<Translation>();
+  translation = new EventEmitter<Translation>();
 
   private debug = true;
   showInput = false;
@@ -72,7 +72,7 @@ export class TranslitEditHighlightComponent implements AfterViewInit {
   }
 
   handleSubmit(translation: Translation){
-    this.submit.emit(translation);
+    this.translation.emit(translation);
     this.hide();
   }
 

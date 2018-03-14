@@ -3,10 +3,10 @@ import {
   ChangeDetectorRef,
   ComponentFactoryResolver,
   Directive,
-  ElementRef,
+  ElementRef, EventEmitter,
   Inject,
   Input,
-  OnDestroy,
+  OnDestroy, Output,
   Renderer2,
   ViewContainerRef
 } from '@angular/core';
@@ -14,6 +14,7 @@ import {LIT_CONFIG, TranslitConfig} from '../model/translit.config';
 import {Observable} from 'rxjs/Observable';
 import {isNullOrUndefined} from 'util';
 import {TranslitEditHighlightComponent} from "../edit/highlight/translit-edit-highlight.component";
+import {Translation} from "../model/translation";
 
 export interface LitRecord {
   node: any;
@@ -25,6 +26,8 @@ export interface LitRecord {
   selector: '[litTranslate]'
 })
 export class TranslitDirective implements AfterViewChecked, OnDestroy {
+
+  @Output() translation = new EventEmitter<Translation>();
 
   private keys: string[];
 
@@ -79,6 +82,7 @@ export class TranslitDirective implements AfterViewChecked, OnDestroy {
 
         litComponentRef.instance.text = text;
         litComponentRef.instance.translationKey = key;
+        litComponentRef.instance.translation.subscribe(translation => this.translation.emit(translation));
         litComponentRef.location.nativeElement.data = {lit: true};
 
         this.litRecords.push({
