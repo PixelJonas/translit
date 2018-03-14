@@ -6,6 +6,7 @@ import {
   ElementRef,
   Inject,
   Input,
+  OnDestroy,
   Renderer2,
   ViewContainerRef
 } from '@angular/core';
@@ -14,12 +15,22 @@ import {Observable} from 'rxjs/Observable';
 import {TranslitComponent} from './translit.component';
 import {isNullOrUndefined} from 'util';
 
+export interface LitRecord {
+  node: any;
+  text: string;
+  cref: TranslitComponent;
+}
+
 @Directive({
   selector: '[litTranslate]'
 })
-export class TranslitDirective implements AfterViewChecked {
+export class TranslitDirective implements AfterViewChecked, OnDestroy {
 
   private keys: string[];
+
+  private observers: MutationObserver[] = [];
+
+  private litRecords: LitRecord[] = [];
 
   constructor(@Inject(LIT_CONFIG) private config: Observable<TranslitConfig>,
               private viewContainerRef: ViewContainerRef,
@@ -39,6 +50,10 @@ export class TranslitDirective implements AfterViewChecked {
     if (detectChanges) {
       this.changeDetector.detectChanges();
     }
+  }
+
+  ngOnDestroy(): void {
+    this.observers.forEach(o => o.disconnect());
   }
 
   process(node: any): boolean {
@@ -65,8 +80,18 @@ export class TranslitDirective implements AfterViewChecked {
         litComponentRef.instance.text = text;
         litComponentRef.location.nativeElement.data = {lit: true};
 
+        this.litRecords.push({
+          node: node,
+          text: text,
+          cref: litComponentRef.instance,
+        });
+
         const parent = this.renderer.parentNode(node);
         const next = this.renderer.nextSibling(node);
+
+        const observer = new MutationObserver(this.mutationObserver);
+        observer.observe(node, {characterData: true});
+        this.observers.push(observer);
 
         this.renderer.insertBefore(parent, litComponentRef.location.nativeElement, next);
         this.renderer.removeChild(parent, node);
@@ -75,6 +100,20 @@ export class TranslitDirective implements AfterViewChecked {
     }
     return false;
   }
+
+  mutationObserver = (mutations) => {
+    mutations.forEach((mutation) => {
+      const mutatedNode = mutation.target;
+      const record = this.litRecords.find((r: LitRecord) => r.node === mutatedNode);
+      if (record) {
+        const oldText = record.text;
+        const newText = this.getContent(mutatedNode).trim();
+        if (oldText !== newText) {
+          record.cref.text = newText;
+        }
+      }
+    });
+  };
 
   nodeListOf(node: Node): Node[] {
     const nodeList = [];
