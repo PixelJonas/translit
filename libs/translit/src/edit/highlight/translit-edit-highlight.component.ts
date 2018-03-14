@@ -1,8 +1,14 @@
 import {
-  AfterViewChecked,
-  AfterViewInit, Component, ElementRef, EventEmitter, HostBinding, HostListener, Inject, Input, OnChanges, OnInit,
+  AfterViewInit,
+  Component,
+  ElementRef,
+  EventEmitter,
+  HostBinding,
+  HostListener,
+  Inject,
+  Input,
+  OnInit,
   Output,
-  Renderer2,
 } from '@angular/core';
 import { LIT_CONFIG, TranslitConfig } from '../../model/translit.config';
 import { Observable } from 'rxjs/Observable';
@@ -16,27 +22,23 @@ import { Translation } from "../../model/translation";
   templateUrl: './translit-edit-highlight.component.html',
   styleUrls: ['./translit-edit-highlight.component.scss'],
 })
-export class TranslitEditHighlightComponent implements AfterViewInit {
-  @Input()
-  text: string;
+export class TranslitEditHighlightComponent implements AfterViewInit, OnInit {
+  @Input() translationKey: string;
+  @Input() text: string;
 
-  @Input()
-  translationKey: string;
-
-  @Output()
-  submit = new EventEmitter<Translation>();
-
-  private debug = true;
-  showInput = false;
+  @Output() submit = new EventEmitter<Translation>();
 
   @HostBinding('class.lit-highlight-active') myField = true;
+  @HostBinding('title') hostTitle: string;
 
+  showInput = false;
+  text$: Observable<string>;
+  height: number;
+  width: number;
+  private debug = true;
   private active$ = new BehaviorSubject<boolean>(false);
   private display$: Observable<boolean>;
   private editable$: Observable<boolean>;
-
-  height: number;
-  width: number;
 
   constructor(@Inject(LIT_CONFIG) private config$: Observable<TranslitConfig>,
               private elementRef: ElementRef) {
@@ -45,12 +47,23 @@ export class TranslitEditHighlightComponent implements AfterViewInit {
       startWith(false),
     );
 
+    this.text$ = this.config$.pipe(
+      switchMap((resolvedConfig: TranslitConfig) => of(resolvedConfig.translations[resolvedConfig.selectedLanguage])),
+      switchMap((translations) => translations ? translations[this.translationKey] : this.translationKey),
+    );
+
     this.display$ = this.active$.pipe(
       withLatestFrom(this.editable$, ((active, editable) => (active && editable) || this.debug)),
       distinctUntilChanged(),
     );
 
     this.display$.subscribe((display) => this.myField = display);
+  }
+
+  ngOnInit() {
+    this.config$.subscribe((resolvedConfig) => {
+      this.hostTitle = resolvedConfig.style ? resolvedConfig.style.tooltipText : 'change translation';
+    });
   }
 
   ngAfterViewInit() {
@@ -71,7 +84,7 @@ export class TranslitEditHighlightComponent implements AfterViewInit {
 
   }
 
-  handleSubmit(translation: Translation){
+  handleSubmit(translation: Translation) {
     this.submit.emit(translation);
     this.hide();
   }

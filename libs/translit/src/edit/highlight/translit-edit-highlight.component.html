@@ -1,6 +1,5 @@
 <span class="popover__wrapper">
   <span
-    [title]="(config$ | async)?.style?.tooltipText || 'click to change translation'"
     class="lit-text"
     (click)="onClick()">
     {{ text }}
@@ -9,7 +8,6 @@
        *ngIf="showInput"
        [style.top]="(2 * height) + 8 + 'px'"
        [style.width]="2 * width + 'px'"
-       [style.left]="'-' + (width / 2) + 'px'"
        [style.background-color]="(config | async)?.style?.backgroundColor || 'transparent'"
   >
   <lit-input
