@@ -1,17 +1,24 @@
 import {
-  AfterViewInit, Component, ElementRef, EventEmitter, HostListener, Inject, Input, Output,
+  AfterViewInit,
+  Component,
+  ElementRef,
+  EventEmitter,
+  HostListener,
+  Inject,
+  Input,
+  Output,
   ViewChild,
 } from '@angular/core';
-import { Translation } from '../../model/translation';
-import { KEY_CODES } from '../../model/keycode';
-import { LIT_CONFIG, TranslitConfig } from '../../model/translit.config';
 import { Observable } from 'rxjs/Observable';
+import { Translation } from "../../../model/translation";
+import { LIT_CONFIG, TranslitConfig } from "../../../model/translit.config";
+import { KEY_CODES } from "../../../model/keycode";
 
 @Component({
   selector: 'lit-input',
-  templateUrl: './translit-input.component.html'
+  templateUrl: './translit-simple-input.component.html',
 })
-export class TranslitInputComponent implements AfterViewInit {
+export class TranslitSimpleInputComponent implements AfterViewInit {
   @Output() cancel = new EventEmitter();
 
   @Output() submit = new EventEmitter<Translation>();
@@ -28,7 +35,7 @@ export class TranslitInputComponent implements AfterViewInit {
     config.subscribe(resolvedConfig => (this.language = resolvedConfig.selectedLanguage));
   }
 
-  ngAfterViewInit(){
+  ngAfterViewInit() {
     this.translation.nativeElement.focus();
   }
 
