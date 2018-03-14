@@ -5,7 +5,8 @@ import {
   Directive,
   ElementRef,
   Inject,
-  Input,
+  Input, OnDestroy,
+  OnInit,
   Renderer2,
   ViewContainerRef
 } from '@angular/core';
@@ -14,12 +15,22 @@ import {Observable} from 'rxjs/Observable';
 import {TranslitComponent} from './translit.component';
 import {isNullOrUndefined} from 'util';
 
+export interface litRecord {
+  node: any;
+  text: string;
+  cref: TranslitComponent;
+}
+
 @Directive({
   selector: '[litTranslate]'
 })
-export class TranslitDirective implements AfterViewChecked {
+export class TranslitDirective implements AfterViewChecked, OnDestroy {
 
   private keys: string[];
+
+  private observers: MutationObserver[] = [];
+
+  private litRecords = [];
 
   constructor(@Inject(LIT_CONFIG) private config: Observable<TranslitConfig>,
               private viewContainerRef: ViewContainerRef,
@@ -41,6 +52,10 @@ export class TranslitDirective implements AfterViewChecked {
     }
   }
 
+  ngOnDestroy(): void {
+    this.observers.forEach(o => o.disconnect());
+  }
+
   process(node: any): boolean {
     return this.textNode(node)
       ? this.processNode(node)
@@ -59,18 +74,24 @@ export class TranslitDirective implements AfterViewChecked {
     if (text !== '') {
       const key = this.keys.find(value => text.indexOf(value) >= 0);
       if (key) {
-        console.log('Found ', key);
         const litComponentFactory = this.resolver.resolveComponentFactory(TranslitComponent);
         const litComponentRef = this.viewContainerRef.createComponent(litComponentFactory);
 
         litComponentRef.instance.text = text;
         litComponentRef.location.nativeElement.data = {lit: true};
 
+        this.litRecords.push({
+          node: node,
+          text: text,
+          cref: litComponentRef.instance,
+        });
+
         const parent = this.renderer.parentNode(node);
         const next = this.renderer.nextSibling(node);
 
-        console.log(parent);
-        console.log(this.renderer.parentNode(parent));
+        const observer = new MutationObserver(this.mutationObserver);
+        observer.observe(node, {characterData: true});
+        this.observers.push(observer);
 
         this.renderer.insertBefore(parent, litComponentRef.location.nativeElement, next);
         this.renderer.removeChild(parent, node);
@@ -79,6 +100,20 @@ export class TranslitDirective implements AfterViewChecked {
     }
     return false;
   }
+
+  mutationObserver = (mutations) => {
+    mutations.forEach((mutation) => {
+      const mutatedNode = mutation.target;
+      const record = this.litRecords.find((r: litRecord) => r.node === mutatedNode);
+      if (record) {
+        const oldText = record.text;
+        const newText = this.getContent(mutatedNode).trim();
+        if (oldText !== newText) {
+          record.cref.text = newText;
+        }
+      }
+    });
+  };
 
   nodeListOf(node: Node): Node[] {
     const nodeList = [];
