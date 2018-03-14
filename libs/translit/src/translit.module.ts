@@ -6,12 +6,28 @@ import { Observable } from 'rxjs/Observable';
 import { TranslitComponent } from './translit/translit.component';
 import { TranslitEditDirective } from './edit/translit-edit.directive';
 import { TranslitInputComponent } from './edit/input/translit-input.component';
+import { TranslitEditHighlightComponent } from "./edit/highlight/translit-edit-highlight.component";
 
 @NgModule({
   imports: [CommonModule],
-  declarations: [TranslitDirective, TranslitEditDirective, TranslitInputComponent, TranslitComponent],
-  exports: [TranslitDirective, TranslitInputComponent, TranslitEditDirective],
-  entryComponents: [TranslitComponent, TranslitInputComponent]
+  declarations: [
+    TranslitDirective,
+    TranslitEditDirective,
+    TranslitEditHighlightComponent,
+    TranslitInputComponent,
+    TranslitComponent,
+  ],
+  exports: [
+    TranslitDirective,
+    TranslitInputComponent,
+    TranslitEditHighlightComponent,
+    TranslitEditDirective,
+  ],
+  entryComponents: [
+    TranslitComponent,
+    TranslitInputComponent,
+    TranslitEditHighlightComponent,
+  ],
 })
 export class TranslitModule {
   static forRoot(config: Observable<TranslitConfig>): ModuleWithProviders {
@@ -20,9 +36,9 @@ export class TranslitModule {
       providers: [
         {
           provide: LIT_CONFIG,
-          useValue: config
-        }
-      ]
+          useValue: config,
+        },
+      ],
     };
   }
 }
