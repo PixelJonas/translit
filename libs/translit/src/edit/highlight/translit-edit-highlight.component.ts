@@ -23,10 +23,10 @@ import { Translation } from "../../model/translation";
   styleUrls: ['./translit-edit-highlight.component.scss'],
 })
 export class TranslitEditHighlightComponent implements AfterViewInit, OnInit {
-  @Input() translationKey: string;
+  @Input() translationKeys: string[];
   @Input() text: string;
 
-  @Output() submit = new EventEmitter<Translation>();
+  @Output() translation = new EventEmitter<Translation>();
 
   @HostBinding('class.lit-highlight-active') myField = true;
   @HostBinding('title') hostTitle: string;
@@ -49,7 +49,6 @@ export class TranslitEditHighlightComponent implements AfterViewInit, OnInit {
 
     this.text$ = this.config$.pipe(
       switchMap((resolvedConfig: TranslitConfig) => of(resolvedConfig.translations[resolvedConfig.selectedLanguage])),
-      switchMap((translations) => translations ? translations[this.translationKey] : this.translationKey),
     );
 
     this.display$ = this.active$.pipe(
@@ -85,7 +84,7 @@ export class TranslitEditHighlightComponent implements AfterViewInit, OnInit {
   }
 
   handleSubmit(translation: Translation) {
-    this.submit.emit(translation);
+    this.translation.emit(translation);
     this.hide();
   }
 

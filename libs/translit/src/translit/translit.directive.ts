@@ -75,13 +75,13 @@ export class TranslitDirective implements AfterViewChecked, OnDestroy {
   processNode(node: any): boolean {
     const text = this.getContent(node).trim();
     if (text !== '') {
-      const key = this.keys.find(value => text.indexOf(value) >= 0);
-      if (key) {
+      const keys = this.keys.filter(value => text.indexOf(value) >= 0);
+      if (keys && keys.length) {
         const litComponentFactory = this.resolver.resolveComponentFactory(TranslitEditHighlightComponent);
         const litComponentRef = this.viewContainerRef.createComponent(litComponentFactory);
 
         litComponentRef.instance.text = text;
-        litComponentRef.instance.translationKey = key;
+        litComponentRef.instance.translationKeys = keys;
         litComponentRef.instance.translation.subscribe(translation => this.translation.emit(translation));
         litComponentRef.location.nativeElement.data = {lit: true};
 
