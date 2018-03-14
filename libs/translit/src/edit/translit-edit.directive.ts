@@ -32,7 +32,6 @@ export class TranslitEditDirective {
         this.inputVie.destroy();
         this.inputVie = null;
       });
-      componentRef.instance.submit.subscribe(translation => console.log(translation));
       const view = componentRef.hostView;
       this.inputVie = this.viewContainer.insert(view);
     }

@@ -1,0 +1,22 @@
+<span class="popover__wrapper">
+  <span
+    [title]="(config$ | async)?.style?.tooltipText || 'click to change translation'"
+    class="lit-text"
+    (click)="onClick()">
+    {{ text }}
+  </span>
+  <div class="push popover__content"
+       *ngIf="showInput"
+       [style.top]="(2 * height) + 8 + 'px'"
+       [style.width]="2 * width + 'px'"
+       [style.left]="'-' + (width / 2) + 'px'"
+       [style.background-color]="(config | async)?.style?.backgroundColor || 'transparent'"
+  >
+  <lit-input
+    [translationKey]="translationKey"
+    [text]="text"
+    (cancel)="hide()"
+    (submit)="handleSubmit($event)">
+  </lit-input>
+  </div>
+</span>

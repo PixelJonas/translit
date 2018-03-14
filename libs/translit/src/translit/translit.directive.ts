@@ -59,7 +59,6 @@ export class TranslitDirective implements AfterViewChecked {
     if (text !== '') {
       const key = this.keys.find(value => text.indexOf(value) >= 0);
       if (key) {
-        console.log('Found ', key);
         const litComponentFactory = this.resolver.resolveComponentFactory(TranslitComponent);
         const litComponentRef = this.viewContainerRef.createComponent(litComponentFactory);
 
@@ -68,9 +67,6 @@ export class TranslitDirective implements AfterViewChecked {
 
         const parent = this.renderer.parentNode(node);
         const next = this.renderer.nextSibling(node);
-
-        console.log(parent);
-        console.log(this.renderer.parentNode(parent));
 
         this.renderer.insertBefore(parent, litComponentRef.location.nativeElement, next);
         this.renderer.removeChild(parent, node);

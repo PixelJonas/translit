@@ -1,4 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 .lit-text {
-  background-color: yellow;
+  text-decoration: underline dotted rgba(0, 0 ,0, 0.2);
+}
+.lit-text:hover {
+  text-decoration: underline dotted rgba(0, 0 ,0, 1);
 }
