@@ -1,17 +1,59 @@
-<div [litTranslate]="['text.to.replace.1', 'text.to.replace.2', 'text.to.replace.3']">
-  text.to.replace.1
-  <div>
-    <div>
-    Leave this!
-    </div>
-  </div>
-  <div>
-    Leave this too!
-    <div>
-      text.to.replace.2
-    </div>
-    <app-another-component></app-another-component>
-  </div>
-</div>
+<nav class="navbar navbar-expand-md navbar-dark bg-dark">
+  <a class="navbar-brand" href="#" litTranslate="app.title">app.title</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault"
+          aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
 
-<p litEdit>Florian is stupid!</p>
+  <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="#" litTranslate="app.nav.home">app.nav.home <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#" litTranslate="app.nav.about">app.nav.about</a>
+      </li>
+    </ul>
+    <form class="form-inline my-2 my-lg-0" litTranslate="app.nav.search">
+      <input class="form-control mr-sm-2" type="text"  placeholder="app.nav.search" aria-label="Search">
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">app.nav.search</button>
+    </form>
+  </div>
+</nav>
+
+<main role="main">
+  <h1 litTranslate="app.home.headline">app.home.headline</h1>
+  <h2 litTranslate="app.home.subheadline">app.home.subheadline</h2>
+  <div>
+    <div class="row">
+      <div class="card col-md-3 mx-4">
+        <div class="card-body" [litTranslate]="['card.first.title','card.first.text','card.first.button']">
+          <h5 class="card-title">card.first.title</h5>
+          <p class="card-text">
+            Some quick example text to build on card.first.title and make up the bulk of the card's card.first.text .
+          </p>
+          <a href="#" class="btn btn-primary">card.first.button</a>
+        </div>
+      </div>
+      <div class="card col-md-3 mx-4">
+        <div class="card-body" [litTranslate]="['card.second.title','card.second.text','card.second.button']">
+          <h5 class="card-title">card.second.title</h5>
+          <p class="card-text">
+            Some quick example text to build on the card.second.title and make up the bulk of the card's
+            card.second.text .
+          </p>
+          <a href="#" class="btn btn-primary">card.second.button</a>
+        </div>
+      </div>
+      <div class="card col-md-3 mx-4">
+        <div class="card-body" [litTranslate]="['card.third.title','card.third.text','card.third.button']">
+          <h5 class="card-title">card.third.title</h5>
+          <p class="card-text">
+            Some quick example text to build on the card title and make up the bulk of the card's card.third.text .
+          </p>
+          <a href="#" class="btn btn-primary">card.third.button</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
