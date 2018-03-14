@@ -26,10 +26,8 @@ export class TranslitInputComponent {
   @HostListener('document:keydown', ['$event'])
   onKeydownHandler(event: KeyboardEvent) {
     if (event.altKey && event.keyCode === KEY_CODES.ENTER) {
-      console.log('ENTER');
       this.submit.emit(this.createTranslation());
     } else if (event.keyCode === KEY_CODES.ESCAPE) {
-      console.log('CANCEL');
       this.cancel.emit();
     }
   }
