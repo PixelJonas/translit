@@ -15,11 +15,12 @@ import {Observable} from 'rxjs/Observable';
 import {isNullOrUndefined} from 'util';
 import {TranslitEditHighlightComponent} from "../edit/highlight/translit-edit-highlight.component";
 import {Translation} from "../model/translation";
+import {ComponentRef} from "@angular/core/src/linker/component_factory";
 
 export interface LitRecord {
   node: any;
   text: string;
-  cref: TranslitEditHighlightComponent;
+  cref: ComponentRef<TranslitEditHighlightComponent>;
 }
 
 @Directive({
@@ -88,7 +89,7 @@ export class TranslitDirective implements AfterViewChecked, OnDestroy {
         this.litRecords.push({
           node: node,
           text: text,
-          cref: litComponentRef.instance,
+          cref: litComponentRef,
         });
 
         const parent = this.renderer.parentNode(node);
@@ -114,7 +115,19 @@ export class TranslitDirective implements AfterViewChecked, OnDestroy {
         const oldText = record.text;
         const newText = this.getContent(mutatedNode).trim();
         if (oldText !== newText) {
-          record.cref.text = newText;
+          const keys = this.keys.filter(value => newText.indexOf(value) >= 0);
+          if (!keys || !keys.length) {
+            const parent = this.renderer.parentNode(record.cref.location.nativeElement);
+            const next = this.renderer.nextSibling(record.cref.location.nativeElement);
+
+            this.renderer.insertBefore(parent, mutatedNode, next);
+            this.renderer.removeChild(parent, record.cref.location.nativeElement);
+            record.cref.destroy();
+          }
+          else {
+            record.cref.instance.text = newText;
+            record.cref.instance.translationKeys = keys;
+          }
         }
       }
     });
