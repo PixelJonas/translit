@@ -5,8 +5,8 @@ import {
   Directive,
   ElementRef,
   Inject,
-  Input, OnDestroy,
-  OnInit,
+  Input,
+  OnDestroy,
   Renderer2,
   ViewContainerRef
 } from '@angular/core';
@@ -15,7 +15,7 @@ import {Observable} from 'rxjs/Observable';
 import {TranslitComponent} from './translit.component';
 import {isNullOrUndefined} from 'util';
 
-export interface litRecord {
+export interface LitRecord {
   node: any;
   text: string;
   cref: TranslitComponent;
@@ -30,7 +30,7 @@ export class TranslitDirective implements AfterViewChecked, OnDestroy {
 
   private observers: MutationObserver[] = [];
 
-  private litRecords = [];
+  private litRecords: LitRecord[] = [];
 
   constructor(@Inject(LIT_CONFIG) private config: Observable<TranslitConfig>,
               private viewContainerRef: ViewContainerRef,
@@ -104,7 +104,7 @@ export class TranslitDirective implements AfterViewChecked, OnDestroy {
   mutationObserver = (mutations) => {
     mutations.forEach((mutation) => {
       const mutatedNode = mutation.target;
-      const record = this.litRecords.find((r: litRecord) => r.node === mutatedNode);
+      const record = this.litRecords.find((r: LitRecord) => r.node === mutatedNode);
       if (record) {
         const oldText = record.text;
         const newText = this.getContent(mutatedNode).trim();
