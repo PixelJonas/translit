@@ -1,5 +1,6 @@
 import {
-  AfterViewChecked, ChangeDetectorRef,
+  AfterViewChecked,
+  ChangeDetectorRef,
   ComponentFactoryResolver,
   Directive,
   ElementRef,
@@ -8,25 +9,24 @@ import {
   Renderer2,
   ViewContainerRef
 } from '@angular/core';
-import { LIT_CONFIG, TranslitConfig } from '../model/translit.config';
-import { Observable } from 'rxjs/Observable';
-import { TranslitComponent } from './translit.component';
-import { isNullOrUndefined } from 'util';
+import {LIT_CONFIG, TranslitConfig} from '../model/translit.config';
+import {Observable} from 'rxjs/Observable';
+import {TranslitComponent} from './translit.component';
+import {isNullOrUndefined} from 'util';
 
 @Directive({
   selector: '[litTranslate]'
 })
 export class TranslitDirective implements AfterViewChecked {
-  private keys: string[];
-  private managed: any[] = [];
 
+  private keys: string[];
 
   constructor(@Inject(LIT_CONFIG) private config: Observable<TranslitConfig>,
               private viewContainerRef: ViewContainerRef,
               private resolver: ComponentFactoryResolver,
               private elementRef: ElementRef,
               private renderer: Renderer2,
-              private cd: ChangeDetectorRef) {
+              private changeDetector: ChangeDetectorRef) {
   }
 
   @Input()
@@ -35,32 +35,23 @@ export class TranslitDirective implements AfterViewChecked {
   }
 
   ngAfterViewChecked(): void {
-    const checkAgain = this.processNodesOf(this.elementRef.nativeElement);
-    if (checkAgain) {
-      this.cd.detectChanges();
+    const detectChanges = this.process(this.elementRef.nativeElement);
+    if (detectChanges) {
+      this.changeDetector.detectChanges();
     }
   }
 
+  process(node: any): boolean {
+    return this.textNode(node)
+      ? this.processNode(node)
+      : this.processNodesOf(node);
+  }
+
   processNodesOf(node: any): boolean {
-    let check = false;
-    const nodes: NodeList = node.childNodes;
-    if (!nodes || !nodes.length) {
-      return check
-    }
-    for (let i = 0; i < nodes.length; ++i) {
-      const sibling: any = nodes[i];
-      if (sibling.data && sibling.data['lit']) {
-        console.log('already lit');
-        continue;
-      }
-      if (sibling.nodeType === 3) { // node type 3 is a text node
-        check = check || this.processNode(sibling);
-      }
-      else {
-        this.processNodesOf(sibling);
-      }
-    }
-    return check;
+    return this.nodeListOf(node)
+      .filter(n => !this.alreadyProcessed(n))
+      .map(n => this.process(n))
+      .reduce((prev, cur) => prev || cur, false);
   }
 
   processNode(node: any): boolean {
@@ -73,7 +64,7 @@ export class TranslitDirective implements AfterViewChecked {
         const litComponentRef = this.viewContainerRef.createComponent(litComponentFactory);
 
         litComponentRef.instance.text = text;
-        litComponentRef.location.nativeElement.data = { lit: true };
+        litComponentRef.location.nativeElement.data = {lit: true};
 
         const parent = this.renderer.parentNode(node);
         const next = this.renderer.nextSibling(node);
@@ -87,6 +78,24 @@ export class TranslitDirective implements AfterViewChecked {
       }
     }
     return false;
+  }
+
+  nodeListOf(node: Node): Node[] {
+    const nodeList = [];
+    if (node && node.childNodes && node.childNodes.length) {
+      for (let i = 0; i < node.childNodes.length; ++i) {
+        nodeList.push(node.childNodes[i]);
+      }
+    }
+    return nodeList;
+  }
+
+  alreadyProcessed(node: any): boolean {
+    return node && node.data && node.data['lit'];
+  }
+
+  textNode(node: any): boolean {
+    return node && node.nodeType === 3
   }
 
   getContent(node: any): string {

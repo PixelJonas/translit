@@ -77,13 +77,13 @@
     "directive-selector": [
       true,
       "attribute",
-      "app",
+      "lit",
       "camelCase"
     ],
     "component-selector": [
       true,
       "element",
-      "app",
+      "lit",
       "kebab-case"
     ],
     "no-output-on-prefix": true,

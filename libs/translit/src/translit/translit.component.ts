@@ -1,9 +1,10 @@
-import { Component, Input } from '@angular/core';
+import {Component, Input} from '@angular/core';
 
 @Component({
   selector: 'lit-it',
-  template: `<span style="background-color: yellow">{{text}}</span>`
+  template: `<span class="lit-text">{{text}}</span>`
 })
 export class TranslitComponent {
+
   @Input() text: string;
 }
