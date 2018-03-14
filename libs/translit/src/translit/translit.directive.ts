@@ -12,13 +12,13 @@ import {
 } from '@angular/core';
 import {LIT_CONFIG, TranslitConfig} from '../model/translit.config';
 import {Observable} from 'rxjs/Observable';
-import {TranslitComponent} from './translit.component';
 import {isNullOrUndefined} from 'util';
+import {TranslitEditHighlightComponent} from "../edit/highlight/translit-edit-highlight.component";
 
 export interface LitRecord {
   node: any;
   text: string;
-  cref: TranslitComponent;
+  cref: TranslitEditHighlightComponent;
 }
 
 @Directive({
@@ -74,10 +74,11 @@ export class TranslitDirective implements AfterViewChecked, OnDestroy {
     if (text !== '') {
       const key = this.keys.find(value => text.indexOf(value) >= 0);
       if (key) {
-        const litComponentFactory = this.resolver.resolveComponentFactory(TranslitComponent);
+        const litComponentFactory = this.resolver.resolveComponentFactory(TranslitEditHighlightComponent);
         const litComponentRef = this.viewContainerRef.createComponent(litComponentFactory);
 
         litComponentRef.instance.text = text;
+        litComponentRef.instance.translationKey = key;
         litComponentRef.location.nativeElement.data = {lit: true};
 
         this.litRecords.push({

@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { TranslitDirective } from './translit/translit.directive';
 import { LIT_CONFIG, TranslitConfig } from './model/translit.config';
 import { Observable } from 'rxjs/Observable';
-import { TranslitComponent } from './translit/translit.component';
 import { TranslitEditDirective } from './edit/translit-edit.directive';
 import { TranslitInputComponent } from './edit/input/translit-input.component';
 import { TranslitEditHighlightComponent } from "./edit/highlight/translit-edit-highlight.component";
@@ -15,7 +14,6 @@ import { TranslitEditHighlightComponent } from "./edit/highlight/translit-edit-h
     TranslitEditDirective,
     TranslitEditHighlightComponent,
     TranslitInputComponent,
-    TranslitComponent,
   ],
   exports: [
     TranslitDirective,
@@ -24,7 +22,6 @@ import { TranslitEditHighlightComponent } from "./edit/highlight/translit-edit-h
     TranslitEditDirective,
   ],
   entryComponents: [
-    TranslitComponent,
     TranslitInputComponent,
     TranslitEditHighlightComponent,
   ],
