@@ -2,25 +2,29 @@ import {
   AfterViewChecked,
   ChangeDetectorRef,
   ComponentFactoryResolver,
+  ComponentRef,
   Directive,
-  ElementRef, EventEmitter,
+  ElementRef,
+  EventEmitter,
   Inject,
   Input,
-  OnDestroy, Output,
+  OnDestroy,
+  Output,
   Renderer2,
   ViewContainerRef
 } from '@angular/core';
-import {LIT_CONFIG, TranslitConfig} from '../model/translit.config';
-import {Observable} from 'rxjs/Observable';
+import {Observable} from "rxjs/Observable";
 import {isNullOrUndefined} from 'util';
+
 import {TranslitEditHighlightComponent} from "../edit/highlight/translit-edit-highlight.component";
+import {LIT_CONFIG, TranslitConfig} from '../model/translit.config';
 import {Translation} from "../model/translation";
 import { TranslitSplitterComponent } from "./translit-splitter.component";
 
 export interface LitRecord {
   node: any;
   text: string;
-  cref: TranslitSplitterComponent;
+  cref: ComponentRef<TranslitSplitterComponent>;
 }
 
 @Directive({
@@ -89,7 +93,7 @@ export class TranslitDirective implements AfterViewChecked, OnDestroy {
         this.litRecords.push({
           node: node,
           text: text,
-          cref: litComponentRef.instance,
+          cref: litComponentRef,
         });
 
         const parent = this.renderer.parentNode(node);
@@ -115,7 +119,19 @@ export class TranslitDirective implements AfterViewChecked, OnDestroy {
         const oldText = record.text;
         const newText = this.getContent(mutatedNode).trim();
         if (oldText !== newText) {
-          record.cref.text = newText;
+          const keys = this.keys.filter(value => newText.indexOf(value) >= 0);
+          if (!keys || !keys.length) {
+            const parent = this.renderer.parentNode(record.cref.location.nativeElement);
+            const next = this.renderer.nextSibling(record.cref.location.nativeElement);
+
+            this.renderer.insertBefore(parent, mutatedNode, next);
+            this.renderer.removeChild(parent, record.cref.location.nativeElement);
+            record.cref.destroy();
+          }
+          else {
+            record.cref.instance.text = newText;
+            record.cref.instance.translationKeys = keys;
+          }
         }
       }
     });

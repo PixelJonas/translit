@@ -31,7 +31,8 @@ export class AppComponent implements OnInit {
   firstCardText = "Some quick example text to build on card.first.title and make up the bulk of the card's card.first.text .";
 
   ngOnInit() {
-    setTimeout(() => this.firstCardText = "The text of card.first.title just changed after a timeout. But we still reference card.first.text", 5000);
+    setTimeout(() => this.firstCardText = "Look ma! No component!", 1500);
+    setTimeout(() => this.firstCardText = "Suddenly component is back, WOW! card.first.text", 3500);
   }
 
   onTranslation(event) {
