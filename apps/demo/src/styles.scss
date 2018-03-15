@@ -1,9 +1,10 @@
 /* You can add global styles to this file, and also import other style files */
-.lit-text {
+.lit-highlight-active .lit-text {
   text-decoration: underline dotted rgba(0, 0 ,0, 0.2);
 }
-.lit-text:hover {
+.lit-highlight-active .lit-text:hover {
   text-decoration: underline dotted rgba(0, 0 ,0, 1);
+  cursor: pointer;
 }
 
 .scrapyard {

@@ -1,4 +1,6 @@
-import {Component, OnInit} from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
+import { BehaviorSubject } from "rxjs/BehaviorSubject";
+import { ADMIN_SUBJECT } from "./constants";
 
 @Component({
   selector: 'app-root',
@@ -34,5 +36,13 @@ export class AppComponent implements OnInit {
 
   onTranslation(event) {
     console.log(event);
+  }
+  constructor(@Inject(ADMIN_SUBJECT) public admin$: BehaviorSubject<boolean>) {
+
+  }
+
+  switch() {
+    console.log(`switching from ${this.admin$.getValue()} to ${!this.admin$.getValue()}`);
+    this.admin$.next(!this.admin$.getValue());
   }
 }

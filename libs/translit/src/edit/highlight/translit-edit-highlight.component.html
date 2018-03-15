@@ -1,4 +1,4 @@
-<span class="popover__wrapper">
+<span class="popover__wrapper" *ngIf="activeClass">
   <span
     class="lit-text"
     (click)="onClick()">
@@ -6,7 +6,7 @@
   </span>
   <div class="push popover__content"
        *ngIf="showInput"
-       [style.top]="(2 * height) + 8 + 'px'"
+       [style.top]="(height) + 8 + 'px'"
        [style.width]="2 * width + 'px'"
        [style.background-color]="(config | async)?.style?.backgroundColor || 'transparent'"
   >
@@ -18,3 +18,4 @@
   </lit-input>
   </div>
 </span>
+<span *ngIf="!activeClass">{{ text }}</span>

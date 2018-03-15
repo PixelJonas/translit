@@ -15,11 +15,12 @@ import {Observable} from 'rxjs/Observable';
 import {isNullOrUndefined} from 'util';
 import {TranslitEditHighlightComponent} from "../edit/highlight/translit-edit-highlight.component";
 import {Translation} from "../model/translation";
+import { TranslitSplitterComponent } from "./translit-splitter.component";
 
 export interface LitRecord {
   node: any;
   text: string;
-  cref: TranslitEditHighlightComponent;
+  cref: TranslitSplitterComponent;
 }
 
 @Directive({
@@ -77,7 +78,7 @@ export class TranslitDirective implements AfterViewChecked, OnDestroy {
     if (text !== '') {
       const keys = this.keys.filter(value => text.indexOf(value) >= 0);
       if (keys && keys.length) {
-        const litComponentFactory = this.resolver.resolveComponentFactory(TranslitEditHighlightComponent);
+        const litComponentFactory = this.resolver.resolveComponentFactory(TranslitSplitterComponent);
         const litComponentRef = this.viewContainerRef.createComponent(litComponentFactory);
 
         litComponentRef.instance.text = text;

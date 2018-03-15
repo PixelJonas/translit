@@ -6,24 +6,36 @@ import { of } from 'rxjs/observable/of';
 
 import { AppComponent } from './app.component';
 import { AnotherComponent } from './another.component';
+import { BehaviorSubject } from "rxjs/BehaviorSubject";
+import { ADMIN_SUBJECT } from "./constants";
 
-const translitConfig: TranslitConfig = {
+const admin$ = new BehaviorSubject<boolean>(false)
+const config$ = new BehaviorSubject({
   selectedLanguage: 'de',
-  translations: {foo: 'bar', bar: 'foo'},
-  isEditable: of(true),
+  translations: {
+    de: {
+      'foo': 'bar',
+      'bar': 'foo',
+      'card.first.title': 'Florian ist doof! He really is!',
+    },
+  },
+  isEditable: admin$,
   style: {
-    tooltipText: 'change dis!'
-  }
-};
+    tooltipText: 'change dis!',
+  },
+});
 
 @NgModule({
   imports: [
     BrowserModule,
     NgbModule.forRoot(),
-    TranslitModule.forRoot(of(translitConfig)),
+    TranslitModule.forRoot(config$),
   ],
   declarations: [AppComponent, AnotherComponent],
   bootstrap: [AppComponent],
+  providers: [
+    {provide: ADMIN_SUBJECT, useValue: admin$},
+  ],
 })
 export class AppModule {
 }

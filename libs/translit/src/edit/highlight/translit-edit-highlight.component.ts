@@ -12,7 +12,7 @@ import {
 } from '@angular/core';
 import { LIT_CONFIG, TranslitConfig } from '../../model/translit.config';
 import { Observable } from 'rxjs/Observable';
-import { distinctUntilChanged, startWith, switchMap, withLatestFrom, } from "rxjs/operators";
+import { distinctUntilChanged, filter, startWith, switchMap, tap, withLatestFrom, } from "rxjs/operators";
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
 import { of } from "rxjs/observable/of";
 import { Translation } from "../../model/translation";
@@ -23,16 +23,17 @@ import { Translation } from "../../model/translation";
   styleUrls: ['./translit-edit-highlight.component.scss'],
 })
 export class TranslitEditHighlightComponent implements AfterViewInit, OnInit {
-  @Input() translationKeys: string[];
+  @Input() translationKey: string;
   @Input() text: string;
 
   @Output() translation = new EventEmitter<Translation>();
 
-  @HostBinding('class.lit-highlight-active') myField = true;
+  @HostBinding('class.lit-highlight-active') activeClass = true;
+
   @HostBinding('title') hostTitle: string;
 
   showInput = false;
-  text$: Observable<string>;
+
   height: number;
   width: number;
   private debug = true;
@@ -47,16 +48,14 @@ export class TranslitEditHighlightComponent implements AfterViewInit, OnInit {
       startWith(false),
     );
 
-    this.text$ = this.config$.pipe(
-      switchMap((resolvedConfig: TranslitConfig) => of(resolvedConfig.translations[resolvedConfig.selectedLanguage])),
-    );
-
     this.display$ = this.active$.pipe(
       withLatestFrom(this.editable$, ((active, editable) => (active && editable) || this.debug)),
       distinctUntilChanged(),
     );
 
-    this.display$.subscribe((display) => this.myField = display);
+    this.display$.subscribe((display) => {
+      this.activeClass = display;
+    });
   }
 
   ngOnInit() {
@@ -94,6 +93,7 @@ export class TranslitEditHighlightComponent implements AfterViewInit, OnInit {
 
   @HostListener('mouseleave') onLeave() {
     this.active$.next(false);
+    this.hide();
   }
 
 }

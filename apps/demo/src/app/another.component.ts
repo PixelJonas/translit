@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-another-component',
-  template: `{{text}}`
+  template: `{{text}}`,
 })
 export class AnotherComponent implements OnInit {
   text = 'Working hard ....';

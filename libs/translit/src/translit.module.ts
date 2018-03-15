@@ -5,21 +5,25 @@ import { LIT_CONFIG, TranslitConfig } from './model/translit.config';
 import { Observable } from 'rxjs/Observable';
 import { TranslitEditHighlightComponent } from "./edit/highlight/translit-edit-highlight.component";
 import { TranslitSimpleInputComponent } from "./edit/input/simple/translit-simple-input.component";
+import { TranslitSplitterComponent } from "./translit/translit-splitter.component";
 
 @NgModule({
   imports: [CommonModule],
   declarations: [
     TranslitDirective,
     TranslitEditHighlightComponent,
+    TranslitSplitterComponent,
     TranslitSimpleInputComponent,
   ],
   exports: [
     TranslitDirective,
     TranslitSimpleInputComponent,
+    TranslitSplitterComponent,
     TranslitEditHighlightComponent,
   ],
   entryComponents: [
     TranslitSimpleInputComponent,
+    TranslitSplitterComponent,
     TranslitEditHighlightComponent,
   ],
 })

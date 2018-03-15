@@ -1,0 +1,10 @@
+<ng-container *ngFor="let item of text$ | async as list">
+  <ng-container *ngIf="item.key; else textNode">
+    <lit-edit-highlight
+      [translationKey]="item.key"
+      [text]="item.text"
+      (translation)="onTranslation($event)"
+    ></lit-edit-highlight>
+  </ng-container>
+  <ng-container *ngIf="isString(item)"><span>{{ item }}</span></ng-container>
+</ng-container>
