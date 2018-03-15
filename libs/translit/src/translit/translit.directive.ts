@@ -2,20 +2,23 @@ import {
   AfterViewChecked,
   ChangeDetectorRef,
   ComponentFactoryResolver,
+  ComponentRef,
   Directive,
-  ElementRef, EventEmitter,
+  ElementRef,
+  EventEmitter,
   Inject,
   Input,
-  OnDestroy, Output,
+  OnDestroy,
+  Output,
   Renderer2,
   ViewContainerRef
 } from '@angular/core';
-import {LIT_CONFIG, TranslitConfig} from '../model/translit.config';
-import {Observable} from 'rxjs/Observable';
+import {Observable} from "rxjs/Observable";
 import {isNullOrUndefined} from 'util';
+
 import {TranslitEditHighlightComponent} from "../edit/highlight/translit-edit-highlight.component";
+import {LIT_CONFIG, TranslitConfig} from '../model/translit.config';
 import {Translation} from "../model/translation";
-import {ComponentRef} from "@angular/core/src/linker/component_factory";
 
 export interface LitRecord {
   node: any;
